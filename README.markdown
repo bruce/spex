@@ -7,8 +7,8 @@ an executable is run.
 Synopsis
 --------
 
-Stringup is a simple language that used to define scenarios that model
-the corrent behavior of an executable.
+Stringup is a simple language used to define scenarios that model
+the correct behavior of an executable.
 
 The description file consists of exactly one `command` line and any
 number of `scenario` definitions; for example, the following file can
