@@ -67,8 +67,10 @@ module Stringup
           end
         end
         parent.stringup.scenario.assertions.each do |assertion|
-          should assertion.describe_should_at(event) do
-            assertion.__send__(event, self)
+          if assertion.send("#{event}?")
+            should assertion.describe_should_at(event) do
+              assertion.__send__(event, self)
+            end
           end
         end
       end

@@ -29,6 +29,14 @@ module Stringup
       end
     end
 
+    def before?
+      true
+    end
+
+    def after?
+      true
+    end
+
   end
 end
 
