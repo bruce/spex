@@ -1,3 +1,3 @@
 #!/usr/bin/env
 
-stringup execute scenarios.rb manifest.pp
+stringup execute scenarios.rb manifest.pp -s creation

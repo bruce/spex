@@ -24,7 +24,7 @@ module Stringup
       end
     end
     
-    method_option :scenario, :alias => '-s', :description => "Scenario to run", :default => 'default'
+    method_option :scenario, :aliases => '-s', :description => "Scenario to run", :default => 'default'
     desc "execute FILE [ARGS_FOR_COMMAND]", "Execute a scenario in FILE"
     def execute(path, *args)
       script = path_to_script(path)

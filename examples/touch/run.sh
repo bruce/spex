@@ -1,3 +1,3 @@
 #!/usr/bin/env
 
-stringup execute scenarios.rb
+stringup execute scenarios.rb -s creation
