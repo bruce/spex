@@ -1,5 +1,5 @@
 Spex
-========
+====
 
 A quick and dirty test harness for testing assertions before and after
 an executable is run.
@@ -85,7 +85,8 @@ See the `examples/` directory.
 Assertions
 ----------
 
-The list of assertions is very short at this point.
+See the [wiki](http://wiki.github.com/bruce/spex/supported-assertions)
+for the list of supported assertions.
 
 To add an assertion, create a class that inherits from
 `Spex::Assertion` and implements all the neccessary methods.  See
@@ -94,21 +95,7 @@ examples.
 
 Note: If you put your assertions in `~/.spex/assertions/*.rb`,
 they'll automatically be loaded.  If you create any interesting
-assertions, make sure you let me know!
-
-### assert_creates_file
-
-Checks to see if a file was created.
-
-You can pass `:file => true` or `:directory => true` to ensure the
-file is a regular file or directory.
-
-### assert_removes_file
-
-Checks to see if a file was removed.
-
-You can pass `:file => true` or `:directory => true` to ensure the
-file was a regular file or directory before being removed.
+assertions, add them to the [wiki](http://wiki.github.com/bruce/spex/community-assertions)!
 
 Copyright
 ---------
