@@ -27,7 +27,7 @@ module Stringup
     
     def run
       Test::Unit.run = false
-      suite = Test::Unit::TestSuite.new("#{scenario.description} for `#{command}`")
+      suite = Test::Unit::TestSuite.new("#{scenario.description} (`#{command}`)")
       suite << test(:before).suite
       suite << test(:after).suite
       Test::Unit::UI::Console::TestRunner.run(suite)
