@@ -1,17 +1,16 @@
 Stringup
 ========
 
-Quick and dirty test harness for executables, testing assertions
-before and after it is run.
+A quick and dirty test harness for testing assertions before and after
+an executable is run.
 
 Synopsis
 --------
 
-Run stringup with:
+Stringup is a simple language that used to define scenarios that model
+the corrent behavior of an executable.
 
-    $ stringup execute /path/to/stringup/scenarios/description.rb
-
-The description file consists of exactle one `command` line and any
+The description file consists of exactly one `command` line and any
 number of `scenario` definitions; for example, the following file can
 be used to verify running `touch /tmp/foo` will create a new file:
 
@@ -77,6 +76,11 @@ For more information on specific commands, you'll want to use `help`,
 eg:
 
     $ stringup help execute
+
+Examples
+--------
+
+See the `examples/` directory.
 
 Assertions
 ----------
