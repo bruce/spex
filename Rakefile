@@ -13,6 +13,7 @@ begin
     gem.add_dependency "thor"
     gem.add_dependency "shoulda"
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
