@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class FileAssertion < Assertion
 
     def initialize(path, options = {})

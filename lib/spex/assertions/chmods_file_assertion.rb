@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class ChmodsFileAssertion < FileAssertion
     assertion :chmods_file
 

@@ -1,3 +1,3 @@
 #!/usr/bin/env ruby
 
-stringup execute scenarios.rb
+spex execute scenarios.rb

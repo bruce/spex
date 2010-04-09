@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class Scenario
 
     attr_reader :name, :description

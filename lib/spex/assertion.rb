@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class Assertion
     extend Enumerable
     
@@ -44,6 +44,6 @@ Dir.glob(File.join(File.dirname(__FILE__), 'assertions', '**/*.rb')) do |path|
   require path
 end
 
-Dir.glob(File.join(ENV['HOME'], '.stringup', 'assertions', '**/*.rb')) do |path|
+Dir.glob(File.join(ENV['HOME'], '.spex', 'assertions', '**/*.rb')) do |path|
   require path
 end

@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class CreatesFileAssertion < FileAssertion
     assertion :creates_file
 

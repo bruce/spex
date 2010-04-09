@@ -1,6 +1,6 @@
 require 'etc'
 
-module Stringup
+module Spex
   class ChownsFileAssertion < FileAssertion
     assertion :chowns_file
 

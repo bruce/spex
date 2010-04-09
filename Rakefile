@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "stringup"
+    gem.name = "spex"
     gem.summary = %Q{A test harness for executables}
     gem.description = %Q{An easy-to-use test harness that runs assertions before and after and executable is run}
     gem.email = "bruce@codefluency.com"
-    gem.homepage = "http://github.com/bruce/stringup"
+    gem.homepage = "http://github.com/bruce/spex"
     gem.authors = ["Bruce Williams"]
     gem.add_dependency "thor"
     gem.add_dependency "shoulda"
@@ -47,7 +47,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "stringup #{version}"
+  rdoc.title = "spex #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

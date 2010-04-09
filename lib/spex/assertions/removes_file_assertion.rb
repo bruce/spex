@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class RemovesFileAssertion < FileAssertion
     assertion :removes_file
 

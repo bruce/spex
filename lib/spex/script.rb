@@ -1,4 +1,4 @@
-module Stringup
+module Spex
   class Script
 
     attr_accessor :command
@@ -39,7 +39,7 @@ module Stringup
       end
       
       def scenario(name, description = name.to_s, &block)
-        scenario = ::Stringup::Scenario.new(name, description, &block)
+        scenario = ::Spex::Scenario.new(name, description, &block)
         @script << scenario
       end
       def command(line)

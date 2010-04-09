@@ -1,6 +1,6 @@
 require 'etc'
 
-module Stringup
+module Spex
   class ChgrpsFileAssertion < FileAssertion
     assertion :chgrps_file
 

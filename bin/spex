@@ -2,6 +2,6 @@
 
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
-require 'stringup'
+require 'spex'
 
-Stringup::CLI.start
+Spex::CLI.start

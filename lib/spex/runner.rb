@@ -14,7 +14,7 @@ end
 
 require 'test/unit/ui/console/testrunner'
 
-module Stringup
+module Spex
   class Runner
     
     attr_reader :script, :scenario
@@ -55,18 +55,18 @@ module Stringup
 
     def test(event)
       klass = Class.new(Test::Unit::TestCase) do
-        class << self; attr_accessor :stringup, :name, :event; end
+        class << self; attr_accessor :spex, :name, :event; end
       end
-      klass.name = "Stringup::Test::Order#{event == :after ? 1 : 0}::#{event.to_s.capitalize}Puppet"
-      klass.stringup = self
+      klass.name = "Spex::Test::Order#{event == :after ? 1 : 0}::#{event.to_s.capitalize}Puppet"
+      klass.spex = self
       klass.event = event
       klass.context "#{event} `#{command}`" do
         if parent.event == :after
           setup do
-            @ran_puppet ||= self.class.stringup.run_command
+            @ran_puppet ||= self.class.spex.run_command
           end
         end
-        parent.stringup.scenario.assertions.each do |assertion|
+        parent.spex.scenario.assertions.each do |assertion|
           if assertion.send("#{event}?")
             should assertion.describe_should_at(event) do
               assertion.__send__(event, self)

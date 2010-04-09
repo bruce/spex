@@ -4,7 +4,7 @@ rescue LoadError
   abort "Requires 'thor'"
 end
 
-module Stringup
+module Spex
   class CLI < Thor
 
     desc "info FILE", "Display defined command and scenarios in FILE"
@@ -38,7 +38,7 @@ module Stringup
     no_tasks do
       def path_to_script(path)
         unless File.exist?(path)
-          abort "No stringup file found at #{path}"
+          abort "No spex file found at #{path}"
         end
         script = Script.evaluate_file(path)
         script.validate!
