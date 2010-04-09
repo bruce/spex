@@ -17,7 +17,7 @@ be used to verify running `touch /tmp/foo` will create a new file:
     command 'touch /tmp/foo'
 
     scenario :new, "Creates a file" do
-      assert_creates '/tmp/foo'
+      assert_creates_file '/tmp/foo'
     end
 
 If this was in `scenarios.rb`, you could run this with stringup:
@@ -28,7 +28,7 @@ If you had named the scenario `default`, the `--scenario` option
 wouldn't have been necessary, ie:
 
     scenario :default "Creates a file" do
-      assert_creates '/tmp/foo'
+      assert_creates_file '/tmp/foo'
     end
 
     $ stringup execute scenarios.rb
@@ -96,14 +96,14 @@ Note: If you put your assertions in `~/.stringup/assertions/*.rb`,
 they'll automatically be loaded.  If you create any interesting
 assertions, make sure you let me know!
 
-### assert_creates
+### assert_creates_file
 
 Checks to see if a file was created.
 
 You can pass `:file => true` or `:directory => true` to ensure the
 file is a regular file or directory.
 
-### assert_removes
+### assert_removes_file
 
 Checks to see if a file was removed.
 

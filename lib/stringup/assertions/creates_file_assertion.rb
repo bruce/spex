@@ -1,6 +1,6 @@
 module Stringup
-  class FileCreatesAssertion < FileAssertion
-    assertion :creates
+  class CreatesFileAssertion < FileAssertion
+    assertion :creates_file
 
     def before(test_case)
       test_case.assert !File.exist?(@path), "File already exists at #{@path}"

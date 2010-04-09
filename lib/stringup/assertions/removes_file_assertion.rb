@@ -1,6 +1,6 @@
 module Stringup
-  class FileRemovesAssertion < FileAssertion
-    assertion :removes
+  class RemovesFileAssertion < FileAssertion
+    assertion :removes_file
 
     def after(test_case)
       test_case.assert !File.exist?(@path), "File still exists at #{@path}"
