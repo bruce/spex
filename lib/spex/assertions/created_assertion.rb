@@ -6,6 +6,10 @@ module Spex
       test_case.assert !File.exist?(target), "File already exists at #{target}"
     end
 
+    def before_should
+      "not find #{kind_name} at `#{target}`"
+    end
+
     def after(test_case)
       test_case.assert File.exist?(target), "File was not created at #{target}"
       case kind
@@ -16,15 +20,8 @@ module Spex
       end
     end
 
-    def describe_should_at(event)
-      case event
-      when :before
-        "not find #{kind_name} at `#{target}`"
-      when :after
-        "have created #{kind_name} at `#{target}`"
-      else
-        super
-      end
+    def after_should
+      "have created #{kind_name} at `#{target}`"
     end
     
   end
