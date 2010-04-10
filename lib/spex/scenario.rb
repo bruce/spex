@@ -1,24 +1,34 @@
 module Spex
   class Scenario
+    include Enumerable
 
-    attr_reader :name, :description
-    def initialize(name, description = name.to_s.capitalize, &block)
+    attr_reader :name
+    def initialize(name, &block)
       @name = name
-      @description = description
-      instance_eval(&block)
+      Builder.new(self, &block)
     end
 
-    def assertions
-      @assertions ||= []
+    def executions
+      @executions ||= []
     end
 
-    Assertion.each do |name, klass|
-      class_eval %{
-        def assert_#{name}(*args, &block)
-          assertions << Assertion[:#{name}].new(*args, &block)
-        end
-      }
+    def <<(execution)
+      executions << execution
     end
 
+    def each(&block)
+      executions.each(&block)
+    end
+
+    class Builder
+      def initialize(scenario, &block)
+        @scenario = scenario
+        instance_eval(&block) if block_given?
+      end
+
+      def executing(command, &block)
+        @scenario << Execution.new(command, &block)
+      end
+    end
   end
 end

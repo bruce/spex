@@ -22,51 +22,64 @@ module Spex
       @script = script
       @scenario = scenario
       @args = args
-      @log = ''
+      @log = {}
     end
     
     def run
       Test::Unit.run = false
-      suite = Test::Unit::TestSuite.new("#{scenario.description} (`#{command}`)")
-      suite << test(:before).suite
-      suite << test(:after).suite
+      suite = Test::Unit::TestSuite.new(scenario.name)
+      scenario.executions.each_with_index do |execution, index|
+        execution_suite = Test::Unit::TestSuite.new("`#{execution.command}` (##{index + 1})")
+        suite << execution_suite
+        execution_suite << test(execution, :before).suite
+        execution_suite << test(execution, :after).suite
+        execution.each { |assertion| assertion.mark! }
+      end
       Test::Unit::UI::Console::TestRunner.run(suite)
-      output_log
-    end
-
-    def output_log
-      if @log.empty?
-        puts "NO OUTPUT FROM `#{command}`"
-      else
-        line = "\nOUTPUT FROM `#{command}`"
-        puts line, ('=' * line.size)
-        puts @log
+      scenario.each do |execution|
+        output_log(execution)
       end
     end
 
-    def run_command
-      Open3.popen3(command) do |stdin, stdout, stderr|
+    def output_log(execution)
+      if @log[execution].values.all? { |v| v.empty? }
+        puts "NO OUTPUT FROM `#{execution.command}`"
+      else
+        line = "\nOUTPUT FROM `#{execution.command}`"
+        puts line, ('=' * line.size)
+        puts @log[execution].values.join("\n")
+      end
+    end
+
+    def execute(execution)
+      @log[execution] = {:stdout => '', :stderr => ''}
+      Open3.popen3(execution.command) do |stdin, stdout, stderr|
         stdin.close
-        @log << stdout.read
-        @log << stderr.read
+        @log[execution][:stdout] << stdout.read
+        @log[execution][:stderr] << stderr.read
       end
       true
     end
 
-    def test(event)
+    def test(execution, event)
       klass = Class.new(Test::Unit::TestCase) do
-        class << self; attr_accessor :spex, :name, :event; end
+        class << self; attr_accessor :execution, :spex_runner, :name, :event; end
       end
-      klass.name = "Spex::Test::Order#{event == :after ? 1 : 0}::#{event.to_s.capitalize}Puppet"
-      klass.spex = self
+      klass.name = "Spex::Test::Order#{event == :after ? 1 : 0}::#{event.to_s.capitalize}Execution"
+      klass.spex_runner = self
+      klass.execution = execution
       klass.event = event
-      klass.context "#{event} `#{command}`" do
-        if parent.event == :after
+      klass.context "#{event} executing `#{execution.command}`" do
+        case parent.event
+        when :after
           setup do
-            @ran_puppet ||= self.class.spex.run_command
+            @executed ||= self.class.spex_runner.execute(self.class.execution)
           end
+          order = parent.execution.assertions.reverse
+        when :before
+          order = parent.execution.assertions
         end
-        parent.spex.scenario.assertions.each do |assertion|
+        order.each do |assertion|
           if assertion.send("#{event}?")
             should assertion.describe_should_at(event) do
               assertion.__send__(event, self)
@@ -75,14 +88,6 @@ module Spex
         end
       end
       klass
-    end
-
-    private
-
-    def command
-      @command ||= @script.command % @args
-    rescue ArgumentError
-      abort "You provided the wrong number of arguments for command: #{@script.command}"
     end
 
   end

@@ -7,4 +7,11 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'spex'
 
 class Test::Unit::TestCase
+
+  private
+
+  def script(&block)
+    @script = Spex::Script.evaluate(&block)
+  end
+  
 end

@@ -1,34 +1,32 @@
 module Spex
   class Script
+    include Enumerable
 
     attr_accessor :command
 
     def self.evaluate_file(path)
-      evaluate(File.read(path), path)
+      evaluate(File.read(path), path, 1)
     end
 
-    def self.evaluate(text, path)
+    def self.evaluate(*args, &block)
       script = new
-      Builder.new(script).instance_eval(text, path, 1)
+      builder = Builder.new(script, &block)
+      unless block_given?
+        builder.instance_eval(*args)
+      end
       script
     end
 
     def <<(scenario)
-      scenarios[scenario.name.to_sym] = scenario
+      scenarios << scenario
     end
 
     def scenarios
-      @scenarios ||= {}
+      @scenarios ||= []
     end
 
-    def [](name)
-      scenarios[name.to_sym]
-    end
-
-    def validate!
-      unless @command
-        abort "ERROR: The command was not set.\n\nExample:\n\n  command 'cat %s'"
-      end
+    def each(&block)
+      scenarios.each(&block)
     end
 
     class Builder
@@ -38,12 +36,9 @@ module Spex
         instance_eval(&block) if block_given?
       end
       
-      def scenario(name, description = name.to_s, &block)
-        scenario = ::Spex::Scenario.new(name, description, &block)
+      def scenario(name, &block)
+        scenario = ::Spex::Scenario.new(name, &block)
         @script << scenario
-      end
-      def command(line)
-        @script.command = line
       end
 
     end

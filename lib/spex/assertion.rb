@@ -18,6 +18,22 @@ module Spex
       Assertion.registry[name.to_sym] = self
     end
 
+    attr_reader :target, :options
+    def initialize(target, options = {})
+      @target = target
+      if options.is_a?(Hash)
+        @options = options
+        @active = true
+      else
+        @options = {}
+        @active = options
+      end
+    end
+
+    def active?
+      @active
+    end
+
     def describe_should_at(event)
       case event
       when :before
@@ -29,10 +45,20 @@ module Spex
       end
     end
 
+    # Override to support an operation occuring before execution (even
+    # if assertions aren't added via +before+ because +before?+
+    # returns false).
+    def mark!
+    end
+
+    # Override and return false if assertions do not need to be made
+    # before execution
     def before?
       true
     end
 
+    # Override and return false if assertions do not need to be made
+    # after execution
     def after?
       true
     end

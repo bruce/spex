@@ -10,7 +10,6 @@ begin
     gem.email = "bruce@codefluency.com"
     gem.homepage = "http://github.com/bruce/spex"
     gem.authors = ["Bruce Williams"]
-    gem.add_dependency "thor"
     gem.add_dependency "shoulda"
   end
   Jeweler::GemcutterTasks.new

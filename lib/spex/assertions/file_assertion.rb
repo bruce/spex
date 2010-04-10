@@ -1,15 +1,10 @@
 module Spex
   class FileAssertion < Assertion
 
-    def initialize(path, options = {})
-      @path = path
-      @options = options
-    end
-    
     def kind
-      if @options[:directory]
+      if options[:directory]
         :directory
-      elsif @options[:file]
+      elsif options[:file]
         :file
       end
     end

@@ -1,49 +1,82 @@
-begin
-  require 'thor'
-rescue LoadError
-  abort "Requires 'thor'"
-end
+require 'optparse'
+require 'ostruct'
 
 module Spex
-  class CLI < Thor
+  class CLI
 
-    desc "info FILE", "Display defined command and scenarios in FILE"
-    def info(path)
-      script = path_to_script(path)
-      puts "FILE\n\n  #{path}\n\n"
-      puts "COMMAND\n\n  #{script.command}\n\n"
-      puts "SCENARIOS\n\n"
-      script.scenarios.sort_by { |k, v| k.to_s }.each do |_, scenario|
-        puts "  #{scenario.name}: #{scenario.description}"
-        [:before, :after].each do |event|
-          puts "    #{event.to_s.upcase}"
-          scenario.assertions.each do |assertion|
-            puts "      should #{assertion.describe_should_at(event)}"
+    def initialize(args = [])
+      @args = args
+    end
+
+    def options
+      @options ||= OpenStruct.new
+    end
+    
+    def parser
+      @parser ||= OptionParser.new do |opts|
+        opts.banner = 'spex DEFINITION_FILE [OPTIONS]'
+        opts.separator "\nOPTIONS:"
+        opts.on_tail('--help', '-h', 'Show this message') do
+          puts opts
+          exit
+        end
+        opts.on('--describe', '-d', 'Describe DEFINITION_FILE') do
+          options.describe = true
+        end
+      end
+    end
+
+    def run
+      parser.parse!(@args)
+      filename = @args.shift
+      if !filename
+        refuse "No definition file given"
+      elsif !File.exist?(filename)
+        refuse "Definition file not found: #{filename}"
+      else
+        accept(filename)
+      end
+    end
+
+    private
+
+    def accept(filename)
+      script = evaluate(filename)
+      if options.describe
+        describe(script)
+      else
+        execute(script)
+      end
+    end
+
+    def describe(script)
+      script.scenarios.each do |scenario|
+        puts %(SCENARIO "#{scenario.name}")
+        scenario.executions.each do |execution|
+          [:before, :after].each do |event|
+            puts "  #{event.to_s.upcase} EXECUTING `#{execution.command}`"
+            execution.assertions.each do |assertion|
+              if assertion.send("#{event}?")
+                puts "    should #{assertion.describe_should_at(event)}"
+              end
+            end
           end
         end
       end
     end
-    
-    method_option :scenario, :aliases => '-s', :description => "Scenario to run", :default => 'default'
-    desc "execute FILE [ARGS_FOR_COMMAND]", "Execute a scenario in FILE"
-    def execute(path, *args)
-      script = path_to_script(path)
-      scenario = script[options[:scenario]]
-      unless scenario
-        abort "Could not find scenario: #{options[:scenario]}"
+
+    def execute(script)
+      script.each do |scenario|
+        Runner.new(script, scenario).run
       end
-      Runner.new(script, scenario, *args).run
+    end
+    
+    def refuse(error)
+      abort "ERROR: #{error}\n\n#{parser}"
     end
 
-    no_tasks do
-      def path_to_script(path)
-        unless File.exist?(path)
-          abort "No spex file found at #{path}"
-        end
-        script = Script.evaluate_file(path)
-        script.validate!
-        script
-      end
+    def evaluate(filename)
+      Script.evaluate_file(filename)
     end
     
   end
