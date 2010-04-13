@@ -1,64 +1,83 @@
 require 'open3'
-
 begin
-  require 'shoulda'
+  require 'colored'
 rescue LoadError
-  abort "Requires 'shoulda'"
+  abort "Required the 'colored' library"
 end
-
-begin
-  require 'test/unit'
-rescue LoadError
-  abort "Requires 'test/unit'.  On Ruby 1.9 you may need to install the 'test-unit' gem."
-end
-
-require 'test/unit/ui/console/testrunner'
 
 module Spex
   class Runner
     
     attr_reader :script, :scenario
-    def initialize(script, scenario, *args)
+    def initialize(script, scenario)
       @script = script
       @scenario = scenario
-      @args = args
-      @log = {}
     end
     
     def run
-      Test::Unit.run = false
-      suite = Test::Unit::TestSuite.new(scenario.name)
-      scenario.executions.each_with_index do |execution, index|
-        execution_suite = Test::Unit::TestSuite.new("`#{execution.command}` (##{index + 1})")
-        suite << execution_suite
-        execution_suite << test(execution, :before).suite
-        execution_suite << test(execution, :after).suite
-        execution.each { |assertion| assertion.mark! }
-      end
-      Test::Unit::UI::Console::TestRunner.run(suite)
+      puts %(Running scenario "#{scenario.name}").bold
+      proceed = true
       scenario.each do |execution|
-        output_log(execution)
+        puts "Checking pre-assertions"
+        execution.assertions.each do |assertion|
+          print "Pre-assertions for #{assertion}: "
+          assertion.prepare
+          proceed = report { assertion.before }
+          break unless proceed
+        end
+        if proceed
+          puts %(Executing "#{execution.command}")
+          log = execute(execution)
+          passed = true
+          execution.assertions.reverse.each do |assertion|
+            print "Post-assertions for #{assertion}: "
+            passed = report { assertion.after }
+            break unless passed
+          end
+          if passed
+            puts "SCENARIO PASSED".green.bold
+          else
+            abort "SCENARIO FAILED".red.bold
+          end
+          output_log(execution, log)
+        else
+          abort "SCENARIO FAILED (EXECUTION ABORTED)".red.bold
+        end
       end
     end
 
-    def output_log(execution)
-      if @log[execution].values.all? { |v| v.empty? }
-        puts "NO OUTPUT FROM `#{execution.command}`"
-      else
-        line = "\nOUTPUT FROM `#{execution.command}`"
+    def report(&block)
+      yield
+      puts 'PASSED'.green
+      true
+    rescue Test::Unit::AssertionFailedError => e
+      puts 'FAILED'.red
+      puts e.message.yellow
+      puts "At #{find_source(e)}".yellow
+      false
+    end
+
+    def find_source(e)
+      e.backtrace.detect { |line| !line.include?('test/unit') }
+    end
+
+    def output_log(execution, log)
+      log.each do |stream, content|
+        next if content.empty?
+        line = "\n#{stream.to_s.upcase} FOR `#{execution.command}`"
         puts line, ('=' * line.size)
-        puts @log[execution].values.join("\n")
+        puts content
       end
     end
 
     def execute(execution)
-      @log[execution] = {:stdout => '', :stderr => ''}
+      log = {:stdout => '', :stderr => ''}
       Open3.popen3(execution.command) do |stdin, stdout, stderr|
         stdin.close
-        @log[execution][:stdout] << stdout.read
-        @log[execution][:stderr] << stderr.read
+        log[:stdout] << stdout.read
+        log[:stderr] << stderr.read
       end
-      true
+      log
     end
 
     def test(execution, event)
@@ -80,10 +99,8 @@ module Spex
           order = parent.execution.assertions
         end
         order.each do |assertion|
-          if assertion.send("#{event}?")
-            should assertion.describe_should_at(event) do
-              assertion.__send__(event, self)
-            end
+          should "pass assertion #{assertion.inspect}" do
+            assertion.__send__(event, self)
           end
         end
       end

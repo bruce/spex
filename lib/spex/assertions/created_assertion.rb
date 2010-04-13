@@ -1,28 +1,26 @@
 module Spex
   class CreatedAssertion < FileAssertion
-    assertion :created
+    as :created, 'file creation'
+    option :type, "Type ('file' or 'directory'), optional"
 
-    def before(test_case)
-      test_case.assert !File.exist?(target), "File already exists at #{target}"
+    def before
+      assert !File.exist?(target), "File already exists at #{target}"
     end
 
-    def before_should
-      "not find #{kind_name} at `#{target}`"
+    def after
+      assert File.exist?(target), "File was not created at #{target}"
+      check_type
     end
 
-    def after(test_case)
-      test_case.assert File.exist?(target), "File was not created at #{target}"
+    private
+
+    def check_type
       case kind
       when :file
-        test_case.assert File.file?(target), "File created at #{target} is not a regular file"
+        assert File.file?(target), "File created at #{target} is not a regular file"
       when :directory
-        test_case.assert File.file?(target), "File created at #{target} is not a directory"
+        assert File.directory?(target), "File created at #{target} is not a directory"
       end
     end
-
-    def after_should
-      "have created #{kind_name} at `#{target}`"
-    end
-    
   end
 end

@@ -4,42 +4,24 @@ module Spex
 
   # With no option, just verifies a change occurs
   class ModifiedAssertion < FileAssertion
-    assertion :modified
+    as :modified, 'file modification'
 
-    def mark!
-      if !@options[:added] && !@options[:removed]
-        track_checksum!
-      end
+    def prepare
+      track_checksum!
+    end
+
+    def before
+      assert File.exist?(target), "File does not exist at '#{target}'"
     end
     
-    def before?
-      false
-    end
-
-    def after(test_case)
-      test_case.assert File.exist?(@path), "File does not exist at '#{@path}'"
-      if @options[:added]
-        raise NotImplementedError, ":added not implemented"
-      end
-      if @options[:removed]
-        raise NotImplementedError, ":removed not implemented"
-      end
-      if !@options[:added] && !@options[:removed]
-        checksum = current_checksum
-        test_case.assert_not_equal @before_checksum, checksum, "Checksum did not change"
-      end
-    end
-
-    # Only supports @:after@
-    def describe_should_at(event)
-      if @options[:added]
-        operation = 'added content to'
-      elsif @options[:removed]
-        operation = 'removed content from'
+    def after
+      assert File.exist?(target), "File does not exist at '#{target}'"
+      checksum = current_checksum
+      if active?
+        assert_not_equal @before_checksum, checksum, "Checksum did not change"
       else
-        operation = 'modified'
+        assert_equal @before_checksum, checksum, "Checksum changed"
       end
-      "have #{operation} file at '#{@path}'"
     end
 
     private
@@ -49,11 +31,21 @@ module Spex
     end
 
     def current_checksum
-      if File.exist?(@path)
-        Digest::MD5.hexdigest(File.read(@path))
+      if File.exist?(target)
+        generate_checksum
       else
         nil
       end
+    end
+
+    def generate_checksum
+      digest = Digest::MD5.new
+      File.open(target) do |file|
+        while content = file.read(4096)
+          digest << content
+        end
+      end
+      digest.hexdigest
     end
 
     def same_checksum?

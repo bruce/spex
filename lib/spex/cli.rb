@@ -51,15 +51,11 @@ module Spex
 
     def describe(script)
       script.scenarios.each do |scenario|
-        puts %(SCENARIO "#{scenario.name}")
+        puts %(In scenario "#{scenario.name}")
         scenario.executions.each do |execution|
-          [:before, :after].each do |event|
-            puts "  #{event.to_s.upcase} EXECUTING `#{execution.command}`"
-            execution.assertions.each do |assertion|
-              if assertion.send("#{event}?")
-                puts "    should #{assertion.describe_should_at(event)}"
-              end
-            end
+          puts "  When executing `#{execution.command}`"
+          execution.assertions.each do |assertion|
+            puts "    assert #{assertion}"
           end
         end
       end

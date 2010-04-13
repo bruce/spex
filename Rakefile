@@ -10,7 +10,7 @@ begin
     gem.email = "bruce@codefluency.com"
     gem.homepage = "http://github.com/bruce/spex"
     gem.authors = ["Bruce Williams"]
-    gem.add_dependency "shoulda"
+    gem.add_dependency "colored"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

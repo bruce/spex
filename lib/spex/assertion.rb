@@ -1,5 +1,8 @@
+require 'test/unit/assertions'
+
 module Spex
   class Assertion
+    include Test::Unit::Assertions
     extend Enumerable
 
     class UnknownOptionError < ::ArgumentError; end
@@ -15,8 +18,10 @@ module Spex
     def self.registry
       @registry ||= {}
     end
-    
-    def self.assertion(name)
+
+    def self.as(name, description)
+      self.name = name
+      self.description = description
       Assertion.registry[name.to_sym] = self
     end
 
@@ -27,6 +32,8 @@ module Spex
     def self.option(name, description = nil, &block)
       options[name] = Option.new(name, description, &block)
     end
+
+    class << self; attr_accessor :name, :description; end
 
     attr_reader :target, :options
     def initialize(target, options = {})
@@ -54,42 +61,17 @@ module Spex
       @active
     end
 
-    # Override to support an operation occuring before execution (even
-    # if assertions aren't added via +before+ because +before?+
-    # returns false).
-    def mark!
-    end
-
-    # Override and return false if assertions do not need to be made
-    # before execution
-    def before?
-      true
+    def prepare
     end
 
     def before
-      raise NotImplementedError, "Assertion does not describe pre-puppet check"
-    end
-
-    def before_should
-      raise NotImplementedError, "Assertion does not describe pre-puppet check description"
-    end
-
-    # Override and return false if assertions do not need to be made
-    # after execution
-    def after?
-      true
     end
 
     def after
-      raise NotImplementedError, "Assertion does not describe post-puppet check"
     end
 
-    def after_should
-      raise NotImplementedError, "Assertion does not describe post-puppet check description"
-    end
-
-    def describe_should_at(event)
-      send("#{event}_should")
+    def to_s
+      "#{self.class.description} of #{target}"
     end
 
     class Option
