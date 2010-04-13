@@ -17,7 +17,7 @@ class TestAssertion < Test::Unit::TestCase
     context "classes" do
       context "after being registered" do
         setup do
-          @klass.assertion :something
+          @klass.as :something, "Something being added"
         end
         
         should "be added to the list of assertions" do
