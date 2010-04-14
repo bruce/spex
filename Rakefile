@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/bruce/spex"
     gem.authors = ["Bruce Williams"]
     gem.add_dependency "colored"
+    gem.add_dependency "diff-lcs"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
