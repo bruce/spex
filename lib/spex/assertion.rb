@@ -25,6 +25,14 @@ module Spex
       Assertion.registry[name.to_sym] = self
     end
 
+    def self.example(description, text)
+      examples << [description, text]
+    end
+
+    def self.examples
+      @examples ||= []
+    end
+
     def self.options
       @options ||= {}
     end

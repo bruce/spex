@@ -3,6 +3,11 @@ module Spex
     as :changed_mode, "file mode change"
     option :from, "Mode changed from (octal, eg 0600)"
     option :to, "Mode changed to (octal, eg 0700)"
+    
+    example "Changed the file mode", "assert '/tmp/foo', :changed_mode => true"
+    example "Did not change the file mode", "assert '/tmp/foo', :changed_mode => false"
+    example "Changed the file mode from 0666 to 0755", "assert '/tmp/foo', :changed_mode => {:from => 0666, :to => 0755}"
+    example "Changed the file mode to 0750", "assert '/tmp/foo', :changed_mode => {:to => 0750}"
 
     def before
       assert File.exist?(target), "File does not exist at #{target}"

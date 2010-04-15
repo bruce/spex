@@ -2,6 +2,10 @@ module Spex
   class CreatedAssertion < FileAssertion
     as :created, 'file creation'
     option :type, "Type ('file' or 'directory'), optional"
+    example "File was created", "assert '/tmp/foo', :created => true"
+    example "File was not created", "assert '/tmp/foo', :created => false"
+    example "Regular file was created", "assert '/tmp/foo', :created => {:type => 'file'}"
+    example "Directory was created", "assert '/tmp/foo', :created => {:type => 'directory'}"    
 
     def before
       assert !File.exist?(target), "File already exists at #{target}"

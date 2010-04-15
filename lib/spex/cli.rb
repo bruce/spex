@@ -14,7 +14,7 @@ module Spex
     
     def parser
       @parser ||= OptionParser.new do |opts|
-        opts.banner = 'spex DEFINITION_FILE [OPTIONS]'
+        opts.banner = "spex [OPTIONS] DEFINITION_FILE"
         opts.separator "\nOPTIONS:"
         opts.on_tail('--help', '-h', 'Show this message') do
           puts opts
@@ -22,6 +22,10 @@ module Spex
         end
         opts.on('--describe', '-d', 'Describe DEFINITION_FILE') do
           options.describe = true
+        end
+        opts.on('--assertions', '-a', "List supported assertions") do
+          display_assertions
+          exit
         end
       end
     end
@@ -46,6 +50,30 @@ module Spex
         describe(script)
       else
         execute(script)
+      end
+    end
+
+    def display_assertions
+      Assertion.registry.each_value do |klass|
+        line = "Assertion: :#{klass.name} (#{klass.description})"
+        puts line
+        if klass.options.any? || klass.examples.any?
+          puts('=' * line.size)
+        end
+        if klass.options.any?
+          puts "\nOptions\n-------\n\n"
+          klass.options.each do |key, value|
+            puts "*  :#{key}, #{value.description}"
+          end
+        end
+        if klass.examples.any?
+          puts "\nExamples\n--------\n\n"
+          klass.examples.each do |description, example|
+            puts "#{description}:"
+            puts "\n    #{example}\n\n"
+          end
+        end
+        puts
       end
     end
 
