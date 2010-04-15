@@ -12,6 +12,7 @@ begin
     gem.authors = ["Bruce Williams"]
     gem.add_dependency "colored"
     gem.add_dependency "diff-lcs"
+    gem.add_dependency "facter"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

@@ -15,10 +15,10 @@ module Spex
     end
     
     def run
-      puts %(Running scenario "#{scenario.name}").bold
+      puts %(Running scenario "#{scenario.name}").magenta.bold
       proceed = true
       scenario.each do |execution|
-        puts "Checking pre-assertions"
+        puts %(Preparing to execute "#{execution.command}").bold
         execution.assertions.each do |assertion|
           print "Pre-assertions for #{assertion}: "
           assertion.prepare
@@ -26,24 +26,26 @@ module Spex
           break unless proceed
         end
         if proceed
-          puts %(Executing "#{execution.command}")
+          print %(Executing "#{execution.command}": )
+          start = Time.now
           log = execute(execution)
+          elapsed = Time.now - start
+          puts 'DONE (%.2fs)' % elapsed
           passed = true
           execution.assertions.reverse.each do |assertion|
             print "Post-assertions for #{assertion}: "
             passed = report { assertion.after }
             break unless passed
           end
-          if passed
-            puts "SCENARIO PASSED".green.bold
-          else
-            abort "SCENARIO FAILED".red.bold
+          unless passed
+            abort "SCENARIO ASSERTIONS FAILED".red.bold
           end
           output_log(execution, log)
         else
           abort "SCENARIO FAILED (EXECUTION ABORTED)".red.bold
         end
       end
+      puts "SCENARIO PASSED".green.bold
     end
 
     def report(&block)

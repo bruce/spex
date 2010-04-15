@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestAssertion < Test::Unit::TestCase
+class TestModifiedAssertion < Test::Unit::TestCase
 
   def set_assertion(options = {})
     @assertion = Spex::ModifiedAssertion.new(@filename, options)

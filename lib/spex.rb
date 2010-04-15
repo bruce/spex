@@ -1,3 +1,9 @@
+begin
+  require 'facter'
+rescue LoadError
+  abort "Requires 'facter'"
+end
+
 module Spex
   autoload :Assertion,     'spex/assertion'
   autoload :CLI,           'spex/cli'
