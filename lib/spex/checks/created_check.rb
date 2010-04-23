@@ -8,11 +8,17 @@ module Spex
     example "Directory was created", "check '/tmp/foo', :created => {:type => 'directory'}"    
 
     def before
-      assert !File.exist?(target), "File already exists at #{target}"
+      if active?
+        assert !File.exist?(target), "File already exists at #{target}"
+      end
     end
 
     def after
-      assert File.exist?(target), "File was not created at #{target}"
+      if active?
+        assert File.exist?(target), "File was not created at #{target}"
+      else
+        assert !File.exist?(target), "File was created at #{target}"        
+      end
       check_type
     end
 
