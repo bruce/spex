@@ -1,5 +1,5 @@
 module Spex
-  class FileAssertion < Assertion
+  class FileCheck < Check
 
     def kind
       options[:type] ? options[:type].to_sym : :any

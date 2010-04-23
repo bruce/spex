@@ -9,16 +9,16 @@ module Spex
       Builder.new(self, &block)
     end
 
-    def assertions
-      @assertions ||= []
+    def checks
+      @checks ||= []
     end
 
-    def <<(assertion)
-      assertions << assertion
+    def <<(check)
+      checks << check
     end
 
     def each(&block)
-      assertions.each(&block)
+      checks.each(&block)
     end
 
     class Builder
@@ -27,9 +27,9 @@ module Spex
         instance_eval(&block) if block_given?
       end
 
-      def assert(target, assertion_names = {})
-        assertion_names.each do |name, options|
-          @execution << Assertion[name].new(target, options)
+      def check(target, check_names = {})
+        check_names.each do |name, options|
+          @execution << Check[name].new(target, options)
         end
       end
     end

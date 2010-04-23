@@ -1,11 +1,11 @@
 module Spex
-  class RemovedAssertion < FileAssertion
+  class RemovedCheck < FileCheck
     as :removed, 'file removal'
     option :type, "Type (:file or :directory), optional"
-    example "File was removed", "assert '/tmp/foo', :removed => true"
-    example "File was not removed", "assert '/tmp/foo', :removed => false"
-    example "Regular file was removed", "assert '/tmp/foo', :removed => {:type => 'file'}"
-    example "Directory was removed", "assert '/tmp/foo', :removed => {:type => 'directory'}"    
+    example "File was removed", "check '/tmp/foo', :removed => true"
+    example "File was not removed", "check '/tmp/foo', :removed => false"
+    example "Regular file was removed", "check '/tmp/foo', :removed => {:type => 'file'}"
+    example "Directory was removed", "check '/tmp/foo', :removed => {:type => 'directory'}"    
     
     def before
       assert File.exist?(target), "File does not exist at #{target}"

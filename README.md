@@ -1,8 +1,16 @@
 Spex
 ====
 
-A quick and dirty test harness for testing assertions before and after
+A quick and dirty harness for running system state checks before and after
 an executable is run.
+
+It can be used:
+* When developing an executable/configuration, to check real-world
+  results.
+* In production, to ensure the system is in a known state before an
+  executable is run.
+* In production, to provide independent logging/reporting of
+  executable status.
 
 Synopsis
 --------
@@ -16,7 +24,7 @@ be used to verify running `touch /tmp/foo` will create a new file:
 
     scenario "Creates a file" do
       executing 'touch /tmp/foo' do
-        assert '/tmp/foo', :created => true
+        check '/tmp/foo', :created => true
       end
     end
 
@@ -25,7 +33,7 @@ If this was in `run_touch.rb`, you could run this with spex:
     $ spex run_touch.rb
 
 You'll notice that this should pass the first time and fail on
-subsequent invocations -- because the assertion added by `:created => true` fails in the
+subsequent invocations -- because the check added by `:created => true` fails in the
 event a file exists *before* the command is run.
 
 If you want to see what command and scenarios are defined in a file,
@@ -45,20 +53,30 @@ Examples
 
 See the `examples/` directory.
 
-Assertions
-----------
+Checks
+------
 
-See the [wiki](http://wiki.github.com/bruce/spex/supported-assertions)
-for the list of supported assertions.
+You can see the checks that are available with the following command:
 
-To add an assertion, create a class that inherits from
-`Spex::Assertion` and implements all the neccessary methods.  See
-`Spex::Assertion` and the currently defined assertions for
+    $ spex --checks
+
+To add an check, create a class that inherits from
+`Spex::Check` and implements all the neccessary methods.  See
+`Spex::Check` and the currently defined checks for
 examples.
 
-Note: If you put your assertions in `~/.spex/assertions/*.rb`,
+Note: If you put your checks in `~/.spex/checks/*.rb`,
 they'll automatically be loaded.  If you create any interesting
-assertions, add them to the [wiki](http://wiki.github.com/bruce/spex/community-assertions)!
+checks, add them to the
+[wiki](http://wiki.github.com/bruce/spex/community-checks)!
+
+Other Resources
+---------------
+
+For more information, see the
+[wiki](http://wiki.github.com/bruce/spex).
+
+You can file bugs and features using the [issue tracker](http://github.com/bruce/spex/issues).
 
 Copyright
 ---------

@@ -1,59 +1,59 @@
 require 'helper'
 
-class TestStartedAssertion < Test::Unit::TestCase
+class TestStartedCheck < Test::Unit::TestCase
 
-  def set_assertion(options = {})
-    @assertion = Spex::StartedAssertion.new('testproc', options)
+  def set_check(options = {})
+    @check = Spex::StartedCheck.new('testproc', options)
   end
 
-  context "Started Assertion" do
+  context "Started Check" do
     context "instances" do
       context "set to true" do
         setup do
-          set_assertion(true)
+          set_check(true)
         end
         context "process running before execution" do
           setup do
             start_process!
           end
           should "fail" do
-            assertion_fails_before
+            check_fails_before
           end
         end
         context "process not running before execution" do
           context "process running after execution" do
             should "pass" do
-              assertion_passes { start_process! }
+              check_passes { start_process! }
             end
           end
           context "process not running after execution" do
             should 'fail' do
-              assertion_fails
+              check_fails
             end
           end
         end
       end
       context "set to false" do
         setup do
-          set_assertion(false)
+          set_check(false)
         end
         context "process running before execution" do
           setup do
             start_process!
           end
           should "fail" do
-            assertion_fails_before
+            check_fails_before
           end
         end
         context "process not running before execution" do
           context "but process running after execution" do
             should "fail" do
-              assertion_fails { start_process! }
+              check_fails { start_process! }
             end
           end
           context "but process not running after execution" do
             should 'pass' do
-              assertion_passes
+              check_passes
             end
           end
         end

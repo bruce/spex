@@ -28,25 +28,25 @@ class TestScript < Test::Unit::TestCase
       end
     end
     
-    context "a scenario and execution definition with an assertion" do
+    context "a scenario and execution definition with an check" do
       setup do
         script do
           scenario("name") do
             executing('foo') do
-              assert '/tmp/foo', :created => true
+              check '/tmp/foo', :created => true
             end
           end
         end
       end
       
-      should "create an assertion instance" do
+      should "create an check instance" do
         execution = @script.scenarios.first.executions.first
-        assert_equal 1, execution.assertions.size
-        assertion = execution.assertions.first
-        assert_kind_of Spex::Assertion, assertion
-        assert_equal '/tmp/foo', assertion.target
-        assert assertion.active?
-        assert_equal({}, assertion.options)
+        assert_equal 1, execution.checks.size
+        check = execution.checks.first
+        assert_kind_of Spex::Check, check
+        assert_equal '/tmp/foo', check.target
+        assert check.active?
+        assert_equal({}, check.options)
       end
     end
 

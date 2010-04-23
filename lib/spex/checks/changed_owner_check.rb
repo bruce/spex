@@ -1,17 +1,17 @@
 require 'etc'
 
 module Spex
-  class ChangedOwnerAssertion < FileAssertion
+  class ChangedOwnerCheck < FileCheck
     as :changed_owner, 'file owner change'
     option :from, "From username or uid"
     option :to, "To username or uid"
 
-    example "Changed the file owner", "assert '/tmp/foo', :changed_owner => true"
-    example "Did not change the file owner", "assert '/tmp/foo', :changed_owner => false"
-    example "Changed the file owner from 'root' to 'bruce'", "assert '/tmp/foo', :changed_owner => {:from => 'root', :to => 'bruce'}"
-    example "Changed the file owner from uid 501 to uid 503", "assert '/tmp/foo', :changed_owner => {:from => 501, :to => 503}"
-    example "Changed the file owner to 'jim'", "assert '/tmp/foo', :changed_owner => {:to => 'jim'}"
-    example "Changed the file owner to uid 506", "assert '/tmp/foo', :changed_owner => {:to => 506}"
+    example "Changed the file owner", "check '/tmp/foo', :changed_owner => true"
+    example "Did not change the file owner", "check '/tmp/foo', :changed_owner => false"
+    example "Changed the file owner from 'root' to 'bruce'", "check '/tmp/foo', :changed_owner => {:from => 'root', :to => 'bruce'}"
+    example "Changed the file owner from uid 501 to uid 503", "check '/tmp/foo', :changed_owner => {:from => 501, :to => 503}"
+    example "Changed the file owner to 'jim'", "check '/tmp/foo', :changed_owner => {:to => 'jim'}"
+    example "Changed the file owner to uid 506", "check '/tmp/foo', :changed_owner => {:to => 506}"
     
     def before
       assert File.exist?(target), "File does not exist at #{target}"

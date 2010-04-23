@@ -19,10 +19,10 @@ module Spex
       proceed = true
       scenario.each do |execution|
         puts %(Preparing to execute "#{execution.command}").bold
-        execution.assertions.each do |assertion|
-          print "Pre-assertions for #{assertion}: "
-          assertion.prepare
-          proceed = report { assertion.before }
+        execution.checks.each do |check|
+          print "Pre-checks for #{check}: "
+          check.prepare
+          proceed = report { check.before }
           break unless proceed
         end
         if proceed
@@ -32,13 +32,13 @@ module Spex
           elapsed = Time.now - start
           puts 'DONE (%.2fs)' % elapsed
           passed = true
-          execution.assertions.reverse.each do |assertion|
-            print "Post-assertions for #{assertion}: "
-            passed = report { assertion.after }
+          execution.checks.reverse.each do |check|
+            print "Post-checks for #{check}: "
+            passed = report { check.after }
             break unless passed
           end
           unless passed
-            abort "SCENARIO ASSERTIONS FAILED".red.bold
+            abort "SCENARIO CHECKS FAILED".red.bold
           end
           output_log(execution, log)
         else
@@ -96,13 +96,13 @@ module Spex
           setup do
             @executed ||= self.class.spex_runner.execute(self.class.execution)
           end
-          order = parent.execution.assertions.reverse
+          order = parent.execution.checks.reverse
         when :before
-          order = parent.execution.assertions
+          order = parent.execution.checks
         end
-        order.each do |assertion|
-          should "pass assertion #{assertion.inspect}" do
-            assertion.__send__(event, self)
+        order.each do |check|
+          should "pass check #{check.inspect}" do
+            check.__send__(event, self)
           end
         end
       end

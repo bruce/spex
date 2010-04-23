@@ -1,8 +1,8 @@
 module Spex
-  class RestartedAssertion < ProcessAssertion
+  class RestartedCheck < ProcessCheck
     as :restarted, 'process restart'
-    example "Process was restarted", "assert 'postfix', :restarted => true"
-    example "Process was not restarted", "assert 'postfix', :restarted => false"
+    example "Process was restarted", "check 'postfix', :restarted => true"
+    example "Process was not restarted", "check 'postfix', :restarted => false"
 
     def before
       @before_pid = current_pid

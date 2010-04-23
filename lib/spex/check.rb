@@ -1,7 +1,7 @@
 require 'test/unit/assertions'
 
 module Spex
-  class Assertion
+  class Check
     include Test::Unit::Assertions
     extend Enumerable
 
@@ -22,7 +22,7 @@ module Spex
     def self.as(name, description)
       self.name = name
       self.description = description
-      Assertion.registry[name.to_sym] = self
+      Check.registry[name.to_sym] = self
     end
 
     def self.example(description, text)
@@ -92,10 +92,10 @@ module Spex
   end
 end
 
-Dir.glob(File.join(File.dirname(__FILE__), 'assertions', '**/*.rb')) do |path|
+Dir.glob(File.join(File.dirname(__FILE__), 'checks', '**/*.rb')) do |path|
   require path
 end
 
-Dir.glob(File.join(ENV['HOME'], '.spex', 'assertions', '**/*.rb')) do |path|
+Dir.glob(File.join(ENV['HOME'], '.spex', 'checks', '**/*.rb')) do |path|
   require path
 end

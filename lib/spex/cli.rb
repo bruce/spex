@@ -23,8 +23,8 @@ module Spex
         opts.on('--describe', '-d', 'Describe DEFINITION_FILE') do
           options.describe = true
         end
-        opts.on('--assertions', '-a', "List supported assertions") do
-          display_assertions
+        opts.on('--checks', '-c', "List supported checks") do
+          display_checks
           exit
         end
       end
@@ -53,9 +53,9 @@ module Spex
       end
     end
 
-    def display_assertions
-      Assertion.registry.each_value do |klass|
-        line = "Assertion: :#{klass.name} (#{klass.description})"
+    def display_checks
+      Check.registry.each_value do |klass|
+        line = "Check: :#{klass.name} (#{klass.description})"
         puts line
         if klass.options.any? || klass.examples.any?
           puts('=' * line.size)
@@ -82,8 +82,8 @@ module Spex
         puts %(In scenario "#{scenario.name}")
         scenario.executions.each do |execution|
           puts "  When executing `#{execution.command}`"
-          execution.assertions.each do |assertion|
-            puts "    assert #{assertion}"
+          execution.checks.each do |check|
+            puts "    assert #{check}"
           end
         end
       end

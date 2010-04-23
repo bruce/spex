@@ -5,16 +5,16 @@ require 'diff/lcs/array'
 module Spex
 
   # With no option, just verifies a change occurs
-  class ModifiedAssertion < FileAssertion
+  class ModifiedCheck < FileCheck
     as :modified, 'file modification'
     option :added, "Added content (string or regexp)"
     option :removed, "Removed content (string or regexp)"
-    example "Modified a file", "assert '/tmp/foo', :modified => true"
-    example "Did not modify a file", "assert '/tmp/foo', :modified => false"
-    example "Added a line with 'a substring' in it", "assert '/tmp/foo', :modified => {:added => 'a substring'}"
-    example "Added a line matching /a substring pattern/", "assert '/tmp/foo', :modified => {:added => /a substring pattern/}"
-    example "Removed a line with 'a substring' in it", "assert '/tmp/foo', :modified => {:removed => 'a substring'}"
-    example "Removed a line matching /a substring pattern/", "assert '/tmp/foo', :modified => {:removed => /a substring pattern/}"
+    example "Modified a file", "check '/tmp/foo', :modified => true"
+    example "Did not modify a file", "check '/tmp/foo', :modified => false"
+    example "Added a line with 'a substring' in it", "check '/tmp/foo', :modified => {:added => 'a substring'}"
+    example "Added a line matching /a substring pattern/", "check '/tmp/foo', :modified => {:added => /a substring pattern/}"
+    example "Removed a line with 'a substring' in it", "check '/tmp/foo', :modified => {:removed => 'a substring'}"
+    example "Removed a line matching /a substring pattern/", "check '/tmp/foo', :modified => {:removed => /a substring pattern/}"
 
     def prepare
       track_checksum!

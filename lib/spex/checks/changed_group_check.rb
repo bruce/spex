@@ -1,17 +1,17 @@
 require 'etc'
 
 module Spex
-  class ChangedGroupAssertion < FileAssertion
+  class ChangedGroupCheck < FileCheck
     as :changed_group, 'file group change'
     option :to, "To group name or gid"
     option :from, "From group name or gid"
     
-    example "Changed the file group", "assert '/tmp/foo', :changed_group => true"
-    example "Did not change the file group", "assert '/tmp/foo', :changed_group => false"
-    example "Changed the file group from 'wheel' to 'www-users'", "assert '/tmp/foo', :changed_group => {:from => 'wheel', :to => 'www-users'}"
-    example "Changed the file group from gid 210 to gid 288", "assert '/tmp/foo', :changed_group => {:from => 210, :to => 288}"
-    example "Changed the file group to 'users'", "assert '/tmp/foo', :changed_group => {:to => 'users'}"
-    example "Changed the file group to gid 203", "assert '/tmp/foo', :changed_group => {:to => 203}"
+    example "Changed the file group", "check '/tmp/foo', :changed_group => true"
+    example "Did not change the file group", "check '/tmp/foo', :changed_group => false"
+    example "Changed the file group from 'wheel' to 'www-users'", "check '/tmp/foo', :changed_group => {:from => 'wheel', :to => 'www-users'}"
+    example "Changed the file group from gid 210 to gid 288", "check '/tmp/foo', :changed_group => {:from => 210, :to => 288}"
+    example "Changed the file group to 'users'", "check '/tmp/foo', :changed_group => {:to => 'users'}"
+    example "Changed the file group to gid 203", "check '/tmp/foo', :changed_group => {:to => 203}"
     
     def before
       assert File.exist?(target), "File does not exist at #{target}"

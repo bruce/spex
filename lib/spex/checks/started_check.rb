@@ -1,8 +1,8 @@
 module Spex
-  class StartedAssertion < ProcessAssertion
+  class StartedCheck < ProcessCheck
     as :started, 'process start'
-    example "Process was started", "assert 'postfix', :started => true"
-    example "Process was not started", "assert 'postfix', :started => false"
+    example "Process was started", "check 'postfix', :started => true"
+    example "Process was not started", "check 'postfix', :started => false"
 
     def before
       pid = current_pid

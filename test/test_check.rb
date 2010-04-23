@@ -1,14 +1,14 @@
 require 'helper'
 
-class TestAssertion < Test::Unit::TestCase
-  context "Assertion" do
+class TestCheck < Test::Unit::TestCase
+  context "Check" do
     setup do
-      @klass = Class.new(Spex::Assertion)
+      @klass = Class.new(Spex::Check)
     end
 
     context "instances" do
       should "raise an exception if instantiated with an unknown option" do
-        assert_raises Spex::Assertion::UnknownOptionError do
+        assert_raises Spex::Check::UnknownOptionError do
           @klass.new('/tmp/foo', :unknown => 'option')
         end
       end
@@ -20,8 +20,8 @@ class TestAssertion < Test::Unit::TestCase
           @klass.as :something, "Something being added"
         end
         
-        should "be added to the list of assertions" do
-          assert_equal @klass, Spex::Assertion[:something]
+        should "be added to the list of checks" do
+          assert_equal @klass, Spex::Check[:something]
         end    
       end
       
@@ -41,7 +41,7 @@ class TestAssertion < Test::Unit::TestCase
           end
           
           should "be of the correct class" do
-            assert_kind_of Spex::Assertion::Option, @option
+            assert_kind_of Spex::Check::Option, @option
           end
           
           should "have a name" do

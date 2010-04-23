@@ -1,8 +1,8 @@
 module Spex
-  class StoppedAssertion < ProcessAssertion
+  class StoppedCheck < ProcessCheck
     as :stopped, 'process stop'
-    example "Process was stopped", "assert 'postfix', :stopped => true"
-    example "Process was not stopped", "assert 'postfix', :stopped => false"
+    example "Process was stopped", "check 'postfix', :stopped => true"
+    example "Process was not stopped", "check 'postfix', :stopped => false"
 
     def before
       assert current_pid, "Process '#{target}' is not running (will not be stopped)"

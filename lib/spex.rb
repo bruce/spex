@@ -5,10 +5,10 @@ rescue LoadError
 end
 
 module Spex
-  autoload :Assertion,     'spex/assertion'
+  autoload :Check,         'spex/check'
   autoload :CLI,           'spex/cli'
   autoload :Execution,     'spex/execution'
-  autoload :FileAssertion, 'spex/assertions/file_assertion'
+  autoload :FileCheck,     'spex/checks/file_check'
   autoload :Runner,        'spex/runner'
   autoload :Scenario,      'spex/scenario'
   autoload :Script,        'spex/script'

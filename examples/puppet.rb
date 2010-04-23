@@ -4,6 +4,6 @@ end
 
 scenario "Creates a file" do
   executing "puppet /tmp/spex-manifest.pp" do
-    assert '/tmp/foo', :created => true
+    check '/tmp/foo', :created => true
   end
 end

@@ -1,5 +1,5 @@
 module Spex
-  class ProcessAssertion < Assertion
+  class ProcessCheck < Check
 
     def pattern
       @pattern ||= target.is_a?(Regexp) ? target : Regexp.new(target)
