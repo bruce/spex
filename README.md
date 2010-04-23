@@ -5,6 +5,7 @@ A quick and dirty harness for running system state checks before and after
 an executable is run.
 
 It can be used:
+
 * When developing an executable/configuration, to check real-world
   results.
 * In production, to ensure the system is in a known state before an
