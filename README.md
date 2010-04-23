@@ -6,12 +6,9 @@ an executable is run.
 
 It can be used:
 
-* When developing an executable/configuration, to check real-world
-  results.
-* In production, to ensure the system is in a known state before an
-  executable is run.
-* In production, to provide independent logging/reporting of
-  executable status.
+* When developing an executable/configuration, to check real-world results.
+* In production, to ensure the system is in a known state before an executable is run.
+* In production, to provide independent logging/reporting of executable status.
 
 Synopsis
 --------
