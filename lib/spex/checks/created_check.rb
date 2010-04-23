@@ -16,10 +16,10 @@ module Spex
     def after
       if active?
         assert File.exist?(target), "File was not created at #{target}"
+        check_type
       else
         assert !File.exist?(target), "File was created at #{target}"        
       end
-      check_type
     end
 
     private

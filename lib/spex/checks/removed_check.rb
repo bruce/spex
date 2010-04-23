@@ -8,12 +8,18 @@ module Spex
     example "Directory was removed", "check '/tmp/foo', :removed => {:type => 'directory'}"    
     
     def before
-      assert File.exist?(target), "File does not exist at #{target}"
-      check_type
+      if active?
+        assert File.exist?(target), "File does not exist at #{target}"
+        check_type
+      end
     end
 
     def after
-      assert !File.exist?(target), "File still exists at #{target}"
+      if active?
+        assert !File.exist?(target), "File still exists at #{target}"
+      else
+        assert File.exist?(target), "File was removed from #{target}"        
+      end
     end
 
     private
