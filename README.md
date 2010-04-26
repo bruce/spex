@@ -16,9 +16,7 @@ Synopsis
 Spex is a simple language used to define scenarios that model
 the correct behavior of an executable.
 
-The description file consists of exactly one `command` line and any
-number of `scenario` definitions; for example, the following file can
-be used to verify running `touch /tmp/foo` will create a new file:
+The description file consists of any number of `scenario` definitions; for example, the following file can be used to verify running `touch /tmp/foo` will create a new file:
 
     scenario "Creates a file" do
       executing 'touch /tmp/foo' do
@@ -35,7 +33,7 @@ subsequent invocations -- because the check added by `:created => true` fails in
 event a file exists *before* the command is run.
 
 If you want to see what command and scenarios are defined in a file,
-use `spex info`, eg:
+use `spex --describe`, eg:
 
     $ spex --describe run_touch.rb
 
